@@ -48,7 +48,7 @@ function List() {
   };
 
   const clearCompleted = () => {
-    setTodos(todos.filter((todo) => !todo.completed));
+    setTodos((todos) => todos.filter((todo) => !todo.completed));
   };
 
   return (

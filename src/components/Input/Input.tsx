@@ -6,7 +6,8 @@ const Input: FC<InputPropsT> = ({ onSubmit }) => {
   const [text, setText] = useState("");
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setText(!e.target.value.trim() ? e.target.value.trim() : e.target.value);
+    const trimmedValue = e.target.value.trim();
+    setText(!trimmedValue ? trimmedValue : e.target.value);
   };
 
   const onClick = () => {
