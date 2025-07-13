@@ -6,8 +6,12 @@ function List() {
   const [todos, setTodos] = useState<{ note: string; completed: boolean }[]>(
     () => {
       const cache = localStorage.getItem("todos") || "[]";
-      const cachedTodos = JSON.parse(cache);
-      return cachedTodos;
+      try {
+        const cachedTodos = JSON.parse(cache);
+        return Array.isArray(cachedTodos) ? cachedTodos : [];
+      } catch {
+        return [];
+      }
     }
   );
 
@@ -52,20 +56,23 @@ function List() {
   };
 
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full max-w-md" data-testid="todo-list">
       <div className="flex flex-col gap-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold text-violet-50 mb-2">
+          <h1
+            className="text-4xl font-black text-purple-900"
+            data-testid="todo-app-title"
+          >
             To-Do Tasks
           </h1>
-          <p className="text-violet-300 text-lg">
+          <p className="text-gray-500 text-md" data-testid="todo-status">
             {totalCount === 0
-              ? "What’s next?"
+              ? "What's next?"
               : `${completedCount} of ${totalCount} completed`}
           </p>
         </div>
         <Input onSubmit={addToList} />
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4" data-testid="todo-items-container">
           {todos.map(({ note, completed }, i) => (
             <Item
               key={i}
@@ -78,13 +85,16 @@ function List() {
           ))}
         </div>
 
-        <div className="p-2 border-t border-gray-100">
-          <div className="flex justify-between items-center text-md text-violet-300">
-            <span>{totalCount - completedCount} remaining</span>
+        <div className="p-2 border-t border-gray-300" data-testid="todo-footer">
+          <div className="flex justify-between items-center text-sm text-gray-500">
+            <span data-testid="todo-remaining-count">
+              {totalCount - completedCount} of {totalCount} remaining
+            </span>
             {completedCount > 0 && (
               <button
                 onClick={clearCompleted}
-                className="text-violet-100 hover:text-violet-50 transition-colors duration-200"
+                className="text-purple-900 hover:text-purple-700 font-medium transition-colors duration-300"
+                data-testid="todo-clear-completed-button"
               >
                 Clear completed
               </button>
